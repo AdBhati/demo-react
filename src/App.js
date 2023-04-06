@@ -1,23 +1,29 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
 import './App.css';
+import HomePage from './pages/HomePage';
+import axios from 'axios';
 
-function App() {
+const App = () => {
+
+  const [users, setUsers] = useState([]);
+
+  const getUsersFromJsonPlaceHolder = async () => {
+    try {
+      const { data } = await axios.get(`https://jsonplaceholder.typicode.com/users`);
+      setUsers(data);
+    } catch (error) {
+      console.log('error======> ', error.message)
+    }
+  }
+
+  useEffect(() => {
+    getUsersFromJsonPlaceHolder();
+  }, [])
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <HomePage users={users} />
     </div>
   );
 }
